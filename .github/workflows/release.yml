@@ -1,0 +1,45 @@
+name: Create a release on GitHub
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  testMaven:
+    name: Unit tests using maven
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 11
+          cache: maven
+      - name: Install Maven
+        uses: stCarolas/setup-maven@v4
+        with:
+          maven-version: 3.8.2
+      - name: Launch tests
+        run: mvn test
+  
+  bumpVersionAndCreateRelease:
+    needs: [testMaven]
+    name: Bump version and create release using Semantic release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+      - name: Install Semantic release
+        run: | 
+          npm install -g semantic-release \
+          @semantic-release/exec \
+          @semantic-release/git \
+          @semantic-release/changelog
+      - name: Run semantic release to bump version and create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
