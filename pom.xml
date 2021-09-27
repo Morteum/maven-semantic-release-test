@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>nc.schaeffer</groupId>
 	<artifactId>maven-semantic-release-test</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>maven-semantic-release-test</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
